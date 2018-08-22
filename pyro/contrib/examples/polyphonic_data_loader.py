@@ -16,6 +16,7 @@ und Kognitive Systeme at Universitaet Karlsruhe.
 from os.path import exists, join
 
 import numpy as np
+import six
 import six.moves.cPickle as pickle
 import torch
 import torch.nn as nn
@@ -51,6 +52,16 @@ def process_data(base_path, filename, T_max=160, min_note=21, note_range=88):
 # this logic will be initiated upon import
 base_path = './data'
 process_data(base_path, "jsb_processed.pkl")
+jsb_file_loc = "./data/jsb_processed.pkl"
+
+
+# ingest training/validation/test data from disk
+def load_data():
+    with open(jsb_file_loc, "rb") as f:
+        if six.PY2:
+            return pickle.load(f)
+        else:
+            return pickle.load(f, encoding="latin1")
 
 
 # this function takes a numpy mini-batch and reverses each sequence
